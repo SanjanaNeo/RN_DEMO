@@ -1,20 +1,5 @@
 import { StyleSheet, Text, View, Button } from 'react-native'
-import React, { useReducer } from 'react'
-
-const INCREMENT=1
-
-const reducer = (state,action) =>{
-//state===counter:number
-//action===type:increase||decrease,payload:1||-1
-switch(action.type){
-  case 'increase':
-    return {...state,counter:state.counter+action.payload}
-  case 'decrease':
-    return {...state,counter:state.counter-action.payload}
-  default:
-    return state
-}
-}
+import React, { useState } from 'react'
 
 const CounterScreen = () => {
     //This syntax is basically array destructuring
@@ -23,9 +8,7 @@ const CounterScreen = () => {
     //Similarly const [colorOne,colorTwo] = colors, will give outputs as,
     //console.log(colorOne)="red", and console.log(colorTwo)="green"
 
-    //const [counter,setCounter] = useState(0)
-    const[state,dispatch]=useReducer(reducer,{counter:0})
-
+    const [counter,setCounter] = useState(0)
     //useState is used to initialize the counter state
     //Whenever setCounter(), is called, the entire functional component gets re-rendered,and updated value of counter gets 
     //displayed.
@@ -34,14 +17,12 @@ const CounterScreen = () => {
   return (
     <View>
         <Button title="Increase" onPress={()=>{
-            //setCounter(counter+1)
-            dispatch({type:'increase',payload:INCREMENT})
+            setCounter(counter+1)
         }}/>
           <Button title="Decrease" onPress={()=>{
-            //setCounter(counter-1)
-            dispatch({type:'decrease',payload:INCREMENT})
+            setCounter(counter-1)
         }}/>
-      <Text>Current Count:{state.counter}</Text>
+      <Text>Current Count:{counter}</Text>
     </View>
   )
 }

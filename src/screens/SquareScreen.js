@@ -1,66 +1,58 @@
 import { StyleSheet, Text, View } from 'react-native'
-import React, { useState } from 'react'
+import React, { useReducer } from 'react'
 import ColorCounter from '../../components/ColorCounter'
-import { set } from 'react-native-reanimated'
+
+const reducer = (state, action) => {
+  //state === {red:number,green:number,blue:number}
+  //action === {type:'change_red'||'change_green'||'change_blue',payload:15||-15}
+
+  switch (action.type) {
+    case 'change_red':
+      return state.red+action.payload>255 || state.red+action.payload<0
+      ?state
+      : { ...state, red: state.red + action.payload }
+    //it is as good as
+    //{red:0,green:0,blue:0,red:0+15}
+    //here we are not directly changing state instead we are creating a copy of all the values
+    //from state and updating state.red with a new value
+    //so, it will be updated as {green:0,blue:0,red:0+15}
+    case 'change_green':
+      return state.green+action.payload>255 || state.green+action.payload<0
+      ?state
+      : { ...state, green: state.green + action.payload }
+    case 'change_blue':
+      return state.blue+action.payload>255 || state.blue+action.payload<0
+      ?state
+      : { ...state, blue: state.blue + action.payload }
+    default:
+      return state
+  }
+
+}
 
 const SquareScreen = () => {
 
-  const [red, setRed] = useState(0)
-  const [green, setGreen] = useState(0)
-  const [blue, setBlue] = useState(0)
+  const [state, dispatch] = useReducer(reducer, { red: 0, green: 0, blue: 0 })
+  const {red,green,blue} = state
+  //state === {red:number,green:number,blue:number}
 
   const COLOR_INCREMENT = 15
-
-  const setColor = (color, change) => {
-    switch (color) {
-      // case 'red':
-      //   red + change > 255 || red + change < 0 ? null : setRed(red + change)
-      //   return
-      // case 'green':
-      //   green + change > 255 || green + change < 0 ? null : setGreen(green + change)
-      //   return
-      // case 'blue':
-      //   blue + change > 255 || blue + change < 0 ? null : setBlue(blue + change)
-      //   return
-      case 'red':
-        let newColorValue = red + change;
-        if (newColorValue >= 0 && newColorValue <= 255) {
-          setRed(newColorValue);
-        }
-        return;
-      case 'green':
-        newColorValue = green + change;
-        if (newColorValue >= 0 && newColorValue <= 255) {
-          setGreen(newColorValue);
-        }
-        return;
-      case 'blue':
-        newColorValue = blue + change;
-        if (newColorValue >= 0 && newColorValue <= 255) {
-          setBlue(newColorValue);
-        }
-        return;
-      default:
-        return
-    }
-
-  }
 
   return (
     <View>
       <ColorCounter
-        onIncrease={() => setColor('red', COLOR_INCREMENT)}
-        onDecrease={() => setColor('red', -1 * COLOR_INCREMENT)}
+        onIncrease={() => dispatch({ type: 'change_red', payload: COLOR_INCREMENT })}
+        onDecrease={() => dispatch({ type: 'change_red', payload: -1 * COLOR_INCREMENT })}
         colorText='Red' />
       <ColorCounter
         colorText='Green'
-        onIncrease={() => setColor('green', COLOR_INCREMENT)}
-        onDecrease={() => setColor('green', -1 * COLOR_INCREMENT)}
+        onIncrease={() =>dispatch({ type: 'change_green', payload: COLOR_INCREMENT }) }
+        onDecrease={() => dispatch({ type: 'change_green', payload: -1 * COLOR_INCREMENT })}
       />
       <ColorCounter
         colorText='Blue'
-        onIncrease={() => setColor('blue', COLOR_INCREMENT)}
-        onDecrease={() => setColor('blue', -1 * COLOR_INCREMENT)}
+        onIncrease={() =>dispatch({ type: 'change_blue', payload: COLOR_INCREMENT }) }
+        onDecrease={() =>dispatch({ type: 'change_blue', payload: -1 * COLOR_INCREMENT })}
       />
 
       <View
