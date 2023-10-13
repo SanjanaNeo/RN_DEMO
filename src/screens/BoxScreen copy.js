@@ -16,10 +16,10 @@ export default BoxScreen
 
 const styles = StyleSheet.create({
    viewStyle:{
-    borderWidth:3,
-    height:500,
     flexDirection:'row',
-    justifyContent:'center'
+    justifyContent:'center',
+    borderWidth:3,
+    height:200
    },
    view1:{
     width:100,
@@ -33,7 +33,7 @@ const styles = StyleSheet.create({
     height:100,
     borderWidth:1,
     backgroundColor:'green',
-    marginTop:100
+    top:95
    },
    view3:{
     width:100,
